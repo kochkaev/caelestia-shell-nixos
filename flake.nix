@@ -224,7 +224,21 @@ EOF
           };
           
           config = mkIf cfg.enable {
-            environment.systemPackages = [ cfg.package ];
+            environment.systemPackages = with pkgs; [ 
+              cfg.package
+              # Required system packages
+              ddcutil
+              brightnessctl
+              cava
+              networkmanager
+              lm_sensors
+              fish
+              grim
+              swappy
+              libqalculate
+              material-symbols 
+              nerd-fonts.jetbrains-mono
+            ];
             
             systemd.user.services.caelestia-shell = {
               description = "Caelestia Shell";
@@ -251,21 +265,6 @@ EOF
                 cp ${configFile} $HOME/.config/caelestia/shell.json
               fi
             '';
-            
-            # Required system packages
-            environment.systemPackages = with pkgs; [
-              ddcutil
-              brightnessctl
-              cava
-              networkmanager
-              lm_sensors
-              fish
-              grim
-              swappy
-              libqalculate
-              material-symbols
-              (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
-            ];
             
             # Enable required services
             services.pipewire.enable = mkDefault true;
